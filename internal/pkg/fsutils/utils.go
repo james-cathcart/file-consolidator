@@ -2,16 +2,14 @@ package fsutils
 
 import (
 	"crypto/sha256"
-	"fmt"
 	"io"
 	"log"
 	"os"
 )
 
-func HashFile(filePath string, rootPath string) (hash string, err error) {
+func HashFile(filePath string) (hash string, err error) {
 
-	path := fmt.Sprintf("%s%c%s", rootPath, os.PathSeparator, filePath)
-	file, err := os.Open(path)
+	file, err := os.Open(filePath)
 	if err != nil {
 		return
 	}

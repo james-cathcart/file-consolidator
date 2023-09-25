@@ -5,6 +5,7 @@ import (
 	"dedupfs/internal/pkg/fsutils"
 	"fmt"
 	"io/fs"
+	"log"
 	"os"
 	"sync"
 )
@@ -37,9 +38,10 @@ func (dd *DeDuplicator) SearchForDuplicates(
 }
 
 func (dd *DeDuplicator) searchDir(dir string) {
-	fsys := os.DirFS(`.`)
+	fsys := os.DirFS(dir)
 	_ = fs.WalkDir(fsys, dir, func(path string, d fs.DirEntry, err error) error {
-		fmt.Printf("file: %s/%s\n", dir, path)
+		filePath := fmt.Sprintf("%s%s%s", dir, os.PathSeparator, path)
+		log.Printf("searching: %s\n", filePath)
 		dd.wg.Add(1)
 		go func(filePath string) {
 			defer dd.wg.Done()
@@ -51,8 +53,9 @@ func (dd *DeDuplicator) searchDir(dir string) {
 				FilePath: filePath,
 				Hash:     hash,
 			}
-		}(path)
-		return nil
+		}(filePath)
+
+		return err
 	})
 
 	fmt.Println(`Printing Unique Files`)

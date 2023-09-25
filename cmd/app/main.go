@@ -36,10 +36,12 @@ func main() {
 				}
 
 				if !d.IsDir() {
-					log.Printf("hashing file: %s", path)
+
+					filePath := fmt.Sprintf("%s%c%s", dir, os.PathSeparator, path)
+					log.Printf("hashing file: %s", filePath)
 
 					var hash string
-					hash, hashErr := fsutils.HashFile(path, dir)
+					hash, hashErr := fsutils.HashFile(filePath)
 					if hashErr != nil {
 						log.Println(hashErr)
 					}
@@ -57,47 +59,3 @@ func main() {
 
 	fmt.Println("App finished...")
 }
-
-//
-//func MyWalkFunc(path string, d fs.DirEntry, err error) error {
-//
-//	return err
-//}
-//
-//func hashFile(
-//	process chan string,
-//	collect chan common.UniqueFile,
-//	errs chan error,
-//	wg *sync.WaitGroup,
-//) {
-//
-//	for file := range process {
-//		file := file // intermediate variable for go routine
-//		go func(filePath string) {
-//
-//			hash, err := fsutils.HashFile(file)
-//			if err != nil {
-//				errs <- err
-//				return
-//			}
-//			collect <- common.UniqueFile{
-//				FilePath: file,
-//				Hash:     hash,
-//			}
-//		}(file)
-//	}
-//}
-//
-//func processResult(collect chan common.UniqueFile, uniqueFiles map[string]common.UniqueFile, wg *sync.WaitGroup) {
-//	for file := range collect {
-//		if _, ok := uniqueFiles[file.Hash]; !ok {
-//			uniqueFiles[file.Hash] = file
-//		}
-//	}
-//}
-//
-//func processError(errs chan error, reportedErrors []error, wg *sync.WaitGroup) {
-//	for err := range errs {
-//		reportedErrors = append(reportedErrors, err)
-//	}
-//}
