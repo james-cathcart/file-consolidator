@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"sync"
 )
 
 func main() {
@@ -14,6 +15,8 @@ func main() {
 	fmt.Println("Starting app")
 
 	uniqueFiles := make(map[string][]common.FileRecord)
+	collect := make(chan common.FileRecord)
+	wg := sync.WaitGroup{}
 
 	var dirs []string
 	for _, v := range os.Args[1:] {
@@ -29,34 +32,25 @@ func main() {
 			".",
 			func(path string, d fs.DirEntry, err error) error {
 
-				if d == nil {
-					log.Println("warn: DirEntry is nil")
-				}
-
 				if !d.IsDir() {
 
 					filePath := fmt.Sprintf("%s%c%s", dir, os.PathSeparator, path)
-					log.Printf("checking file: %s\n", filePath)
 
-					var hash string
-					hash, hashErr := fsutils.HashFile(filePath)
-					if hashErr != nil {
-						log.Println(hashErr)
-					} else {
-						if _, ok := uniqueFiles[hash]; !ok {
-							uniqueFiles[hash] = []common.FileRecord{
-								{
-									FilePath: filePath,
-									Hash:     hash,
-								},
-							}
+					go func() {
+						wg.Add(1)
+						defer wg.Done()
+						log.Printf("checking file: %s\n", filePath)
+						hash, hashErr := fsutils.HashFile(filePath)
+						if hashErr != nil {
+							log.Println(hashErr)
 						} else {
-							uniqueFiles[hash] = append(uniqueFiles[hash], common.FileRecord{
+							collect <- common.FileRecord{
 								FilePath: filePath,
 								Hash:     hash,
-							})
+							}
 						}
-					}
+
+					}()
 				}
 
 				return err
@@ -64,10 +58,31 @@ func main() {
 
 	}
 
-	fmt.Println(`Duplication Report:`)
+	go func() {
+		wg.Wait()
+		close(collect)
+	}()
+
+	for value := range collect {
+		if _, ok := uniqueFiles[value.Hash]; !ok {
+			uniqueFiles[value.Hash] = []common.FileRecord{
+				{
+					FilePath: value.FilePath,
+					Hash:     value.Hash,
+				},
+			}
+		} else {
+			uniqueFiles[value.Hash] = append(uniqueFiles[value.Hash], common.FileRecord{
+				FilePath: value.FilePath,
+				Hash:     value.Hash,
+			})
+		}
+	}
+
+	fmt.Println("\nDuplication Report:")
 	fmt.Println(`--------------------`)
 
-	fmt.Printf("%d unique files were found, see duplication report below:\n", len(uniqueFiles))
+	fmt.Printf("%d unique files were found, see duplication report below:\n\n", len(uniqueFiles))
 	for hash, filesFound := range uniqueFiles {
 
 		fmt.Printf("For Hash: %s, found:\n", hash)

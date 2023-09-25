@@ -9,6 +9,7 @@ import (
 
 func HashFile(filePath string) (hash string, err error) {
 
+	//log.Printf("hashing file: %s\n", filePath)
 	file, err := os.Open(filePath)
 	if err != nil {
 		return
