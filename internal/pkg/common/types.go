@@ -25,7 +25,7 @@ type FilesFound struct {
 	UniqueFiles map[string]string
 }
 
-type UniqueFile struct {
+type FileRecord struct {
 	FilePath string
 	Hash     string
 }

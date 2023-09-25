@@ -11,14 +11,14 @@ import (
 )
 
 type DeDuplicator struct {
-	data    map[string]common.UniqueFile
-	collect chan common.UniqueFile
+	data    map[string]common.FileRecord
+	collect chan common.FileRecord
 	wg      *sync.WaitGroup
 }
 
 func NewDeDuplicator(
-	data map[string]common.UniqueFile,
-	collect chan common.UniqueFile,
+	data map[string]common.FileRecord,
+	collect chan common.FileRecord,
 	wg *sync.WaitGroup,
 ) Runner {
 	return &DeDuplicator{
@@ -49,7 +49,7 @@ func (dd *DeDuplicator) searchDir(dir string) {
 			if err != nil {
 				return
 			}
-			dd.collect <- common.UniqueFile{
+			dd.collect <- common.FileRecord{
 				FilePath: filePath,
 				Hash:     hash,
 			}
