@@ -3,7 +3,6 @@ package main
 import (
 	"dedupfs/internal/pkg/common"
 	"dedupfs/internal/pkg/fsutils"
-	"errors"
 	"fmt"
 	"io/fs"
 	"log"
@@ -25,22 +24,19 @@ func main() {
 
 		fileSystem := os.DirFS(dir)
 
-		err := fs.WalkDir(
+		_ = fs.WalkDir(
 			fileSystem,
 			".",
 			func(path string, d fs.DirEntry, err error) error {
 
-				log.Printf("walking path: %s", path)
-
 				if d == nil {
 					log.Println("warn: DirEntry is nil")
-				} else {
-					log.Printf("DirEntry name: %s", d.Name())
 				}
 
 				if !d.IsDir() {
 
 					filePath := fmt.Sprintf("%s%c%s", dir, os.PathSeparator, path)
+					log.Printf("checking file: %s\n", filePath)
 
 					var hash string
 					hash, hashErr := fsutils.HashFile(filePath)
@@ -61,20 +57,17 @@ func main() {
 							})
 						}
 					}
-
 				}
 
 				return err
 			})
 
-		if !errors.Is(err, fs.SkipDir) {
-			log.Println(err)
-		}
 	}
 
 	fmt.Println(`Duplication Report:`)
 	fmt.Println(`--------------------`)
 
+	fmt.Printf("%d unique files were found, see duplication report below:\n", len(uniqueFiles))
 	for hash, filesFound := range uniqueFiles {
 
 		fmt.Printf("For Hash: %s, found:\n", hash)
