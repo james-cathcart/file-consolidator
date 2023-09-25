@@ -2,30 +2,25 @@ package fsutils
 
 import (
 	"crypto/sha256"
-	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
 )
 
-func HashFile(filePath string) (hash string, err error) {
+func HashFile(filePath string, rootPath string) (hash string, err error) {
 
-	file, err := os.Open(filePath)
+	path := fmt.Sprintf("%s%c%s", rootPath, os.PathSeparator, filePath)
+	file, err := os.Open(path)
 	if err != nil {
 		return
 	}
 	defer func(fileToClose *os.File) {
 		err := fileToClose.Close()
 		if err != nil {
-			log.Printf("error: could not close file %v", fileToClose)
+			log.Printf("HashFile: could not close file %v", fileToClose)
 		}
 	}(file)
-
-	fileInfo, err := file.Stat()
-	if fileInfo.IsDir() {
-		err = errors.New(`error: directory, skipping comparison`)
-		return
-	}
 
 	hashWriter := sha256.New()
 	_, err = io.Copy(hashWriter, file)
