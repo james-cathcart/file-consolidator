@@ -32,7 +32,7 @@ func (mig *SimpleImpl) MigrateUniqueFiles(destination string, scannedDirs []stri
 
 	for _, file := range files {
 
-		fmt.Printf("migrating file: %s", file.FilePath)
+		fmt.Printf("migrating file: %s\n", file.FilePath)
 
 		sourceFile, err := os.Open(file.FilePath)
 		if err != nil {
