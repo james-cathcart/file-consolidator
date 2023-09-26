@@ -56,13 +56,13 @@ App finished...
 ### Result
 The unique files are now in their respective location relative to the root destiation folder (data3 in this case)
 ```
-$ ls -R data3
-data3:
-foo.txt  sub  zed.txt
+$ tree data3
+data3
+├── bar.txt
+├── sub
+│   └── sub2
+│       └── foo3.txt
+└── zed.txt
 
-data3/sub:
-sub2
-
-data3/sub/sub2:
-foo3.txt
+2 directories, 3 files
 ```
