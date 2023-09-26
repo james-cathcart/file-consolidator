@@ -18,8 +18,8 @@ bin/consolidator <list of dirs space separated> -<options>
 ```
 Example
 ```
-bin/consolidator data 2data
-bin/consolidator data 2data -v
+bin/consolidator data/first data/second
+bin/consolidator data/first data/second -v
 ```
 
 ### Output
@@ -41,23 +41,23 @@ yes
 You will then be asked for the destination directory. This directory must not already exist.
 ```
 Destination directory (must not exist):
-data3
+data/unique
 ```
 The application will then migrate the files
 ```
-Copying unique files to data3
-Creating directory: data3
-migrating file: data/bar.txt
-migrating file: data/sub/sub2/foo3.txt
-migrating file: 2data/zed.txt
+Copying unique files to data/unique
+Creating directory: data/unique
+migrating file: data/first/sub/sub2/foo3.txt
+migrating file: data/first/bar.txt
+migrating file: data/second/zed.txt
 App finished...
 ```
 
 ### Result
 The unique files are now in their respective location relative to the root destiation folder (data3 in this case)
 ```
-$ tree data3
-data3
+$ tree data/unique
+data/unique
 ├── bar.txt
 ├── sub
 │   └── sub2
