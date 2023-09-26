@@ -20,8 +20,8 @@ func TestHashFile(t *testing.T) {
 		{
 			description: `With two files containing the same content`,
 			input: data{
-				file1Path: `../../../first/foo.txt`,
-				file2Path: `../../../first/bar.txt`,
+				file1Path: `../../../data/first/foo.txt`,
+				file2Path: `../../../data/first/bar.txt`,
 			},
 			expect: data{
 				same: true,
@@ -30,8 +30,8 @@ func TestHashFile(t *testing.T) {
 		{
 			description: `With two files containing different content`,
 			input: data{
-				file1Path: `../../../first/foo.txt`,
-				file2Path: `../../../first/zed.txt`,
+				file1Path: `../../../data/first/foo.txt`,
+				file2Path: `../../../data/second/zed.txt`,
 			},
 			expect: data{
 				same: false,
