@@ -22,7 +22,7 @@ bin/consolidator data 2data
 bin/consolidator data 2data -v
 ```
 
-Output
+### Output
 ```
 Starting app
 
@@ -51,4 +51,18 @@ migrating file: data/bar.txt
 migrating file: data/sub/sub2/foo3.txt
 migrating file: 2data/zed.txt
 App finished...
+```
+
+### Result
+The unique files are now in their respective location relative to the root destiation folder (data3 in this case)
+```
+$ ls -R data3
+data3:
+foo.txt  sub  zed.txt
+
+data3/sub:
+sub2
+
+data3/sub/sub2:
+foo3.txt
 ```
