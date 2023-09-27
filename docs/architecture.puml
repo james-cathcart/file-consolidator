@@ -8,13 +8,13 @@ class Main {
     + deduper
     + main()
 }
-interface Migrator {
+interface filemigrator.Migrator {
     +MigrateUniqueFiles(string, []string, map[string]common.FileRecord): error
 }
-interface Scanner {
+interface filescanner.Scanner {
     +ScanDir(bool, []string)
 }
-interface DeDuper {
+interface deduper.DeDuper {
     +DeDuplicate(map[string][]common.FileRecord): common.DeDedupeOutput
 }
 
