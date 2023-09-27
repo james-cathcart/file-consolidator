@@ -1,0 +1,24 @@
+@startuml
+skinparam backgroundColor #777777
+
+start
+:Get directories to scan from os.Args;
+while (hasNext Directory) is (true)
+    :Walk Directory;
+    while (hasNext File) is (true)
+        :HashFile;
+        if (hash != exist) then (true)
+            :add to unique records;
+            :add remaining values to duplicates;
+        endif
+    endwhile
+endwhile (false)
+if (Migrate Unique Files) then (true)
+    :Migrate;
+    :Create relative destination directory;
+    :os.Create new file;
+    :io.Copy data to new file location;
+    stop
+else (false)
+    stop
+@enduml

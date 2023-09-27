@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam backgroundColor #777777
+
+class Main {
+    + migrator
+    + scanner
+    + deduper
+    + main()
+}
+interface Migrator {
+    +MigrateUniqueFiles(string, []string, map[string]common.FileRecord): error
+}
+interface Scanner {
+    +ScanDir(bool, []string)
+}
+interface DeDuper {
+    +DeDuplicate(map[string][]common.FileRecord): common.DeDedupeOutput
+}
+
+Migrator <|- Main
+DeDuper <|- Main
+Scanner <|- Main
+
+@enduml
