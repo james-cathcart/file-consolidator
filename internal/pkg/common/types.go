@@ -10,6 +10,13 @@ type ScanReport struct {
 	UniqueFileCount int
 }
 
+type DeDupeOutput struct {
+	UniqueFiles    map[string]FileRecord
+	DuplicateFiles map[string][]FileRecord
+	TotalCount     int
+	DuplicateCount int
+}
+
 type FileRecord struct {
 	FilePath string
 	Hash     string

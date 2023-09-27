@@ -15,7 +15,7 @@ func main() {
 
 	fmt.Println("Starting app")
 
-	uniqueFiles := make(map[string][]common.FileRecord)
+	filesFound := make(map[string][]common.FileRecord)
 	collect := make(chan common.FileRecord)
 	wg := sync.WaitGroup{}
 
@@ -42,15 +42,15 @@ func main() {
 	}()
 
 	for value := range collect {
-		if _, ok := uniqueFiles[value.Hash]; !ok {
-			uniqueFiles[value.Hash] = []common.FileRecord{
+		if _, ok := filesFound[value.Hash]; !ok {
+			filesFound[value.Hash] = []common.FileRecord{
 				{
 					FilePath: value.FilePath,
 					Hash:     value.Hash,
 				},
 			}
 		} else {
-			uniqueFiles[value.Hash] = append(uniqueFiles[value.Hash], common.FileRecord{
+			filesFound[value.Hash] = append(filesFound[value.Hash], common.FileRecord{
 				FilePath: value.FilePath,
 				Hash:     value.Hash,
 			})
@@ -58,15 +58,15 @@ func main() {
 	}
 
 	deDupe := deduper.New()
-	totalCount, duplicateCount, unique, duplicate := deDupe.DeDuplicate(uniqueFiles)
+	deDupeOutput := deDupe.DeDuplicate(filesFound)
 
 	report := common.ScanReport{
-		UniqueFiles:     unique,
-		DuplicateFiles:  duplicate,
-		FilesFound:      uniqueFiles,
-		TotalFiles:      totalCount,
-		DuplicatesFound: duplicateCount,
-		UniqueFileCount: totalCount - duplicateCount,
+		UniqueFiles:     deDupeOutput.UniqueFiles,
+		DuplicateFiles:  deDupeOutput.DuplicateFiles,
+		FilesFound:      filesFound,
+		TotalFiles:      deDupeOutput.TotalCount,
+		DuplicatesFound: deDupeOutput.DuplicateCount,
+		UniqueFileCount: deDupeOutput.TotalCount - deDupeOutput.DuplicateCount,
 	}
 
 	fmt.Println("\nDuplication Report:")

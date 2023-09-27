@@ -66,3 +66,8 @@ data/unique
 
 2 directories, 3 files
 ```
+# Development
+## Conceptual Logic
+![](docs/Algorithm.png)
+## Architecture
+![](docs/Architecture.png)
