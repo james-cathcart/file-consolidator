@@ -18,8 +18,8 @@ interface deduper.DeDuper {
     +DeDuplicate(map[string][]common.FileRecord): common.DeDedupeOutput
 }
 
-Migrator <|- Main
-DeDuper <|- Main
-Scanner <|- Main
+Migrator <|-- Main
+DeDuper <|-- Main
+Scanner <|-- Main
 
 @enduml
