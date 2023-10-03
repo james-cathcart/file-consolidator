@@ -1,6 +1,6 @@
 @startuml
 'https://plantuml.com/class-diagram
-skinparam backgroundColor #777777
+skinparam monochrome reverse
 
 class Main {
     + migrator
@@ -18,8 +18,8 @@ interface deduper.DeDuper {
     +DeDuplicate(map[string][]common.FileRecord): common.DeDedupeOutput
 }
 
-Migrator <|-- Main
-DeDuper <|-- Main
-Scanner <|-- Main
+Migrator <-- Main
+DeDuper <-- Main
+Scanner <-- Main
 
 @enduml
