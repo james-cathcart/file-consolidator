@@ -1,12 +1,8 @@
 @startuml
 'https://plantuml.com/class-diagram
-skinparam monochrome reverse
 
-class Main {
-    + migrator
-    + scanner
-    + deduper
-    + main()
+interface Main {
+    + main(): int
 }
 interface filemigrator.Migrator {
     +MigrateUniqueFiles(string, []string, map[string]common.FileRecord): error
@@ -18,8 +14,8 @@ interface deduper.DeDuper {
     +DeDuplicate(map[string][]common.FileRecord): common.DeDedupeOutput
 }
 
-Migrator <-- Main
-DeDuper <-- Main
-Scanner <-- Main
+filescanner <-- Main
+filemigrator <-- Main
+deduper <-- Main
 
 @enduml

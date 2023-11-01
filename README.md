@@ -68,6 +68,6 @@ data/unique
 ```
 # Development
 ## Conceptual Logic
-![](docs/Algorithm.png)
+![](docs/algorithm.png)
 ## Architecture
-![](docs/Architecture.png)
+![](docs/architecture.png)
