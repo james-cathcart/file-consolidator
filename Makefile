@@ -5,4 +5,5 @@ clean:
 build:
 	go build -o bin/consolidator cmd/app/main.go
 test:
-	go test ./internal/...
+	go test ./internal/... -coverprofile=coverage.out
+	go tool cover -html=coverage.out -o coverage.html
